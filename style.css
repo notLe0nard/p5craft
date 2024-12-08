@@ -1,0 +1,67 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+  image-rendering: pixelated;
+
+}
+
+#overlay{
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#crosshair{
+  align-self: center;
+  
+}
+
+img {
+  image-rendering: -moz-crisp-edges;         /* Firefox */
+  image-rendering:   -o-crisp-edges;         /* Opera */
+  image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+
+@font-face {
+  font-family: 'minecraft';
+  src: url('assets/fonts/minecraft.otf') format('opentype');
+}
+
+p{
+  font-family: 'minecraft';
+}
+
+#topleft_info{
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  margin: 0;
+  padding: 5px;
+
+  font-size: 30px;
+  background: rgba(0, 0, 0, 0.5);
+
+}
+
+#loading{
+  z-index: -10;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
