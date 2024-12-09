@@ -6,6 +6,7 @@ class Chunk{
     this.position = {x:posX,y:posY,z:posZ};
     this.block_size = 10;
     this.block_id = 0;
+    this.shapes = [];
     //for (let x = 0; x < 5; x++) {
     //  for (let y = 0; y < 5; y++) {
     //    for (let z = 0; z < 5; z++) {
@@ -41,8 +42,10 @@ class Chunk{
     for (let z = this.position.z; z < chunk_size + this.position.z; z++) {
       let height_map = noise(x/100,z/100);
       
-      if(y>map(height_map, 0,1,0,chunk_size)){
+      if(y==round(map(height_map, 0,1,0,chunk_size))){
         block_type = BlockTypes.GRASS_BLOCK;
+      }else if(y>map(height_map, 0,1,0,chunk_size)){
+        block_type = BlockTypes.STONE;
       }else{
         block_type = BlockTypes.AIR;
       }
@@ -60,12 +63,25 @@ class Chunk{
       this.blocks[x-this.position.x][y-this.position.y][z-this.position.z].check_blocked_faces(this);
     }}}
 
+
+
     let test = this;
-    this.shape = buildGeometry(function(){
+    this.shapes[1] = buildGeometry(function(){
       for (let x = test.position.x; x < chunk_size + test.position.x; x++) {
       for (let y = test.position.y; y < chunk_size + test.position.y; y++) {
       for (let z = test.position.z; z < chunk_size + test.position.z; z++) {
-        test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].draw(10);
+        if(test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].type == BlockTypes.GRASS_BLOCK){
+          test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].draw(10);
+        }   
+      }}}
+    })
+    this.shapes[2] = buildGeometry(function(){
+      for (let x = test.position.x; x < chunk_size + test.position.x; x++) {
+      for (let y = test.position.y; y < chunk_size + test.position.y; y++) {
+      for (let z = test.position.z; z < chunk_size + test.position.z; z++) {
+        if(test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].type == BlockTypes.STONE){
+          test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].draw(10);
+        }   
       }}}
     })
     
@@ -78,8 +94,11 @@ class Chunk{
 
   render(){
     if(this.chunk_generated){
-      texture(grass_block_texture);
-      model(this.shape);
+      texture(textures[BlockTypes.GRASS_BLOCK]);
+      model(this.shapes[1]);
+      
+      texture(textures[BlockTypes.STONE]);
+      model(this.shapes[2]);
     }
   }
 }

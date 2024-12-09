@@ -16,10 +16,10 @@ const world_size = 5;
 //no changing
 
 
-
+let textures = [];
 let mouse_captured = false;
 
-let tex;
+
 let grass_block_texture;
 
 let fps = 0;
@@ -38,13 +38,17 @@ p5.disableFriendlyErrors = true; //performance
 
 
 function preload() {//load textures
-  grass_block_texture = loadImage("assets/textures/blocks/grass.png");
+  loadBlockTextures();
+  
 }
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight, WEBGL); 
 
-  tex = canvas.getTexture(grass_block_texture);
+  tex = canvas.getTexture(textures[BlockTypes.GRASS_BLOCK]);
+  tex.setInterpolation(NEAREST, NEAREST);
+
+  tex = canvas.getTexture(textures[BlockTypes.STONE]);
   tex.setInterpolation(NEAREST, NEAREST);
 
   translate(0,0,0);
@@ -79,6 +83,7 @@ function draw() {
   
   background("#78A7FF"); // sky
 
+  let c = color(255, 0, 0);
   lights();
   //pointLight(color(255, 0, 0), 0, -150, 0);
   //pointLight(color(0, 255, 0), 0, 150, 0);

@@ -3,9 +3,18 @@ const BlockTypes = {
   GRASS_BLOCK: 1,
   DIRT: 2,
   STONE: 3,
-  WATER: 4,
-  // Add more block types as needed
 };
+
+
+
+function loadBlockTextures(){
+
+  textures[BlockTypes.GRASS_BLOCK] = loadImage("assets/textures/blocks/grass.png");
+  textures[BlockTypes.STONE] = loadImage("assets/textures/blocks/stone.png");
+  
+
+}
+
 
 
 class Block {
