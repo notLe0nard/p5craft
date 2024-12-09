@@ -6,7 +6,7 @@ let deceleration = 0.02; // Deceleration rate
 let aceleration = 0.02; // Aceleration rate
 let max_velo = 5;
 const chunk_size = 32;
-const world_size = 10;
+const world_size = 5;
 
 
 
