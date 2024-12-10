@@ -91,7 +91,7 @@ height: 8vmin;
   border: none;
   font-size: 4vmin;
 background-repeat: no-repeat;
-background-image: url("/assets/textures/gui/button.png");
+background-image: url("assets/textures/gui/button.png");
 background-size: cover;
 margin-top: 2vmin;
 color: white;
@@ -101,7 +101,7 @@ text-shadow: .5vmin .5vmin 0px #000000;
 transition: all 0.5s ease;
 }
 .button:hover{
-  background-image: url("/assets/textures/gui/button_highlighted.png");
+  background-image: url("assets/textures/gui/button_highlighted.png");
 transform: scale(1.05);
 }
 
@@ -129,7 +129,7 @@ height: 8vmin;
   border: none;
   font-size: 4vmin;
 background-repeat: no-repeat;
-background-image: url("/assets/textures/gui/button_disabled.png");
+background-image: url("assets/textures/gui/button_disabled.png");
 background-size: cover;
 margin-top: 2vmin;
 color: white;
