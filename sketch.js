@@ -51,10 +51,15 @@ function setup_() {
   tex = canvas.getTexture(textures[BlockTypes.STONE]);
   tex.setInterpolation(NEAREST, NEAREST);
 
-  translate(0,0,0);
-  textureMode(NORMAL);
+  tex = canvas.getTexture(textures[BlockTypes.DIRT]);
+  tex.setInterpolation(NEAREST, NEAREST);
+  
+  
 
-  frameRate(target_fps);
+  translate(0,0,0);
+  //textureMode(NORMAL);
+
+  //frameRate(target_fps);
 
   noStroke(); // kein drahtgitter
 

@@ -7,6 +7,7 @@ class Chunk{
     this.block_size = 10;
     this.block_id = 0;
     this.shapes = [];
+    this.generated_blocks = [];
     //for (let x = 0; x < 5; x++) {
     //  for (let y = 0; y < 5; y++) {
     //    for (let z = 0; z < 5; z++) {
@@ -40,10 +41,12 @@ class Chunk{
     for (let x = this.position.x; x < chunk_size + this.position.x; x++) {
     for (let y = this.position.y; y < chunk_size + this.position.y; y++) {
     for (let z = this.position.z; z < chunk_size + this.position.z; z++) {
-      let height_map = noise(x/100,z/100);
+      let height_map = noise(x/20,z/20);
       
       if(y==round(map(height_map, 0,1,0,chunk_size))){
-        block_type = BlockTypes.GRASS_BLOCK;
+        block_type = BlockTypes.GRASS_BLOCK; //
+      }else if(y>map(height_map, 0,1,0,chunk_size) && y<map(height_map, 0,1,0,chunk_size)+3){
+        block_type = BlockTypes.DIRT;
       }else if(y>map(height_map, 0,1,0,chunk_size)){
         block_type = BlockTypes.STONE;
       }else{
@@ -84,6 +87,15 @@ class Chunk{
         }   
       }}}
     })
+    this.shapes[3] = buildGeometry(function(){
+      for (let x = test.position.x; x < chunk_size + test.position.x; x++) {
+      for (let y = test.position.y; y < chunk_size + test.position.y; y++) {
+      for (let z = test.position.z; z < chunk_size + test.position.z; z++) {
+        if(test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].type == BlockTypes.DIRT){
+          test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].draw(10);
+        }   
+      }}}
+    })
     
 
 
@@ -99,6 +111,9 @@ class Chunk{
       
       texture(textures[BlockTypes.STONE]);
       model(this.shapes[2]);
+
+      texture(textures[BlockTypes.DIRT]);
+      model(this.shapes[3]);
     }
   }
 }
