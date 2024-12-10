@@ -5,19 +5,40 @@
     <script src="p5.sound.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
-    <title>Minecraft 1.21.3</title>
-
+    <link rel="icon" type="image/x-icon" href="/assets/textures/etc/minecraft_title.ico">
+    <title>P5Craft</title>
+    
   </head>
   <body>
     <script src="block.js"></script>
     <script src="sketch.js"></script>
-    
     <script src="chunk.js"></script>
-    
     <script src="capture_mouse.js"></script>
 
-    <p id="topleft_info"></p>
 
-    <img src="https://media.forgecdn.net/attachments/408/956/13414382_l.png" alt="" id="loading">
+
+    
+
+    <div id="main_menu">
+      <img src="/assets/textures/gui/minecraft_title.png" alt="" id="logo">
+      <div id="buttons">
+          <div  class="button" id="singleplayer" onclick="open_singleplayer_menu();">Singleplayer</div>
+          <div  class="button" id="multiplayer" >Multiplayer</div>
+          <div  class="button" id="options"     >Options</div>
+      </div>
+      <p id="bottom_left_text">Minecraft 1.8.9</p>
+    </div>
+    <div id="singleplayer_menu">
+          <div id="buttons_singleplayer">
+      <input type="text" placeholder="chunk size" name="chunk_size" id="chunk_size">
+      <input type="text" placeholder="world size" name="world_size" id="world_size">
+      
+              <div  class="button" id="generate" onclick="generate_world();">Generate</div>
+              <div  class="button" id="back" onclick="open_main_menu();">Back</div>
+          </div>
+    </div>
+    <p id="topleft_info">60 FPS</p>
+    <script src="ui.js"></script>
+    
   </body>
 </html>

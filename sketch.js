@@ -5,8 +5,8 @@ let target_fps = 60;
 let deceleration = 0.02; // Deceleration rate
 let aceleration = 0.02; // Aceleration rate
 let max_velo = 5;
-const chunk_size = 32;
-const world_size = 5;
+let chunk_size = 32;
+let world_size = 2;
 
 
 
@@ -14,7 +14,7 @@ const world_size = 5;
 
 
 //no changing
-
+let running = false;
 
 let textures = [];
 let mouse_captured = false;
@@ -42,7 +42,7 @@ function preload() {//load textures
   
 }
 
-function setup() {
+function setup_() {
   let canvas = createCanvas(windowWidth, windowHeight, WEBGL); 
 
   tex = canvas.getTexture(textures[BlockTypes.GRASS_BLOCK]);
@@ -75,30 +75,34 @@ function setup() {
   }}
 
   setInterval(function(){fps = frameRate();}, 100)
+  running = true;
   
 }
 
 function draw() {
-  
-  
-  background("#78A7FF"); // sky
+  if(running){
 
-  let c = color(255, 0, 0);
-  lights();
-  //pointLight(color(255, 0, 0), 0, -150, 0);
-  //pointLight(color(0, 255, 0), 0, 150, 0);
-  //pointLight(color(0, 0, 255), 0, 0, 150);
+    
+    
+    background("#78A7FF"); // sky
 
-  translate(0,0,0);
-  for (let x = 0; x < world_size; x++) {
-  for (let z = 0; z < world_size; z++) {
-    chunks[x][z].render();
-  }}
+    let c = color(255, 0, 0);
+    lights();
+    //pointLight(color(255, 0, 0), 0, -150, 0);
+    //pointLight(color(0, 255, 0), 0, 150, 0);
+    //pointLight(color(0, 0, 255), 0, 0, 150);
+
+    translate(0,0,0);
+    for (let x = 0; x < world_size; x++) {
+    for (let z = 0; z < world_size; z++) {
+      chunks[x][z].render();
+    }}
 
 
-  orbitControl(mouse_sens,mouse_sens,mouse_sens);
+    orbitControl(mouse_sens,mouse_sens,mouse_sens);
 
-  document.getElementById("topleft_info").innerHTML = `${Math.round(fps)} FPS`;
+    document.getElementById("topleft_info").innerHTML = `${Math.round(fps)} FPS`;
+  }
 }
 
 
