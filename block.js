@@ -7,10 +7,19 @@ const BlockTypes = {
 
 
 
-function loadBlockTextures(){
+function loadBlockTextures(canvas){
   textures[BlockTypes.GRASS_BLOCK] = loadImage("assets/textures/blocks/grass.png");
   textures[BlockTypes.STONE] = loadImage("assets/textures/blocks/stone.png");
   textures[BlockTypes.DIRT] = loadImage("assets/textures/blocks/dirt.png");
+
+  tex = canvas.getTexture(textures[BlockTypes.GRASS_BLOCK]);
+  tex.setInterpolation(NEAREST, NEAREST);
+
+  tex = canvas.getTexture(textures[BlockTypes.STONE]);
+  tex.setInterpolation(NEAREST, NEAREST);
+
+  tex = canvas.getTexture(textures[BlockTypes.DIRT]);
+  tex.setInterpolation(NEAREST, NEAREST);
 }
 
 
