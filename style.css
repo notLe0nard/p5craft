@@ -43,9 +43,9 @@ img {
 body, html{
   padding: 0;
   margin: 0;
-background: black;
+  background: black;
 
-overflow: hidden; /* Hide scrollbars */
+  overflow: hidden; /* Hide scrollbars */
 
 }
 
@@ -56,12 +56,12 @@ overflow: hidden; /* Hide scrollbars */
   align-items: center;
   justify-content: center;
   flex-direction: column;
-background-image: url("https://preview.redd.it/a-few-screenshots-i-took-while-playing-with-complementary-v0-raztsppudmdd1.png?width=1080&crop=smart&auto=webp&s=980b945a2804212c1ce1b14ff365e251cb716a3e");
-background-size: cover;
-position: absolute;
-top:0;
-left:0;
-transition:opacity 2s ease;
+  background-image: url("https://preview.redd.it/a-few-screenshots-i-took-while-playing-with-complementary-v0-raztsppudmdd1.png?width=1080&crop=smart&auto=webp&s=980b945a2804212c1ce1b14ff365e251cb716a3e");
+  background-size: cover;
+  position: absolute;
+  top:0;
+  left:0;
+  transition:opacity 2s ease;
 }
 #singleplayer_menu{
   width:  100vw;
@@ -70,11 +70,11 @@ transition:opacity 2s ease;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-background-image: url("https://preview.redd.it/a-few-screenshots-i-took-while-playing-with-complementary-v0-raztsppudmdd1.png?width=1080&crop=smart&auto=webp&s=980b945a2804212c1ce1b14ff365e251cb716a3e");
-background-size: cover;
-position: absolute;
-top:0;
-left:0;
+  background-image: url("https://preview.redd.it/a-few-screenshots-i-took-while-playing-with-complementary-v0-raztsppudmdd1.png?width=1080&crop=smart&auto=webp&s=980b945a2804212c1ce1b14ff365e251cb716a3e");
+  background-size: cover;
+  position: absolute;
+  top:0;
+  left:0;
 }
 #buttons, #buttons_singleplayer{
   display: flex;
@@ -82,32 +82,34 @@ left:0;
   width: 80vmin;
   height: 50vmin;
 
-transition: all 2s ease;
-transform: scale(1);
+  transition: all 2s ease;
+  transform: scale(1);
 }
 .button{
+  display: flex;
   width: 100%;
-height: 8vmin;
+  height: 8vmin;
   border: none;
   font-size: 4vmin;
-background-repeat: no-repeat;
-background-image: url("assets/textures/gui/button.png");
-background-size: cover;
-margin-top: 2vmin;
-color: white;
-text-align: center;
-align-content:center;
-text-shadow: .5vmin .5vmin 0px #000000;
-transition: all 0.5s ease;
+  background-repeat: no-repeat;
+  background-image: url("assets/textures/gui/button.png");
+  background-size: cover;
+  margin-top: 2vmin;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  text-shadow: .4vmin .4vmin 0px #000000b4;
+  transition: all 0.5s ease;
+  padding: 0;
 }
 .button:hover{
   background-image: url("assets/textures/gui/button_highlighted.png");
-transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 *{
-font-family: 'minecraft';
-image-rendering: pixelated;
+  font-family: 'minecraft';
+  image-rendering: pixelated;
 }
 
 
@@ -116,25 +118,78 @@ image-rendering: pixelated;
   left: 0;
   bottom: 0;
   margin: 0;
+  color: white;
+  margin: .5vmin;
+  text-shadow: .3vmin .2vmin 0px #000000b4;
 }
 #logo{
   width: 70vmin;
   margin: 1vmin;
-transition: all 2s cubic-bezier(0.037, 0.797, 0.261, 0.973);
-transform: scale(10);
+  transition: all 2s cubic-bezier(0.037, 0.797, 0.261, 0.973);
+  transform: scale(10);
 }
 input{
   width: 100%;
-height: 8vmin;
+  height: 8vmin;
   border: none;
   font-size: 4vmin;
-background-repeat: no-repeat;
-background-image: url("assets/textures/gui/button_disabled.png");
-background-size: cover;
-margin-top: 2vmin;
-color: white;
-text-align: center;
-align-content:center;
-text-shadow: .5vmin .5vmin 0px #000000;
-transition: all 0.5s ease;
+  background-repeat: no-repeat;
+  background-image: url("assets/textures/gui/button_disabled.png");
+  background-size: cover;
+  margin-top: 2vmin;
+  color: white;
+  text-align: center;
+  align-content:center;
+  text-shadow: .5vmin .5vmin 0px #000000b4;
+  transition: all 0.5s ease;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'mojang';
+  src: url('assets/fonts/mojangcraft.ttf') format('truetype');
+}
+
+
+#loading_screen{
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #ef303f;
+  flex-direction: column;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  transition: .5s ease opacity;
+}
+
+p#mojang_logo{
+  font-family: mojang;
+  font-size: 10vmin;
+}
+
+div#loading_bar_border{
+  border: white 3px solid;
+  width: 85vmin;
+  height: 3vmin;
+  display: flex;
+  align-items: center;
+}
+div#loading_bar{
+  background: white;
+  width: 0vmin;
+  height: 2vmin;
+  margin: 0.5vmin;
+  transition: .5s ease all;
+
+
+}
+#loading_info{
+  font-size: 1vmin;
+  align-self: left;
 }

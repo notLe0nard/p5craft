@@ -42,7 +42,7 @@ function preload() {//load textures
   
 }
 
-function setup_() {
+async function setup_() {
   let canvas = createCanvas(windowWidth, windowHeight, WEBGL); 
 
   tex = canvas.getTexture(textures[BlockTypes.GRASS_BLOCK]);
@@ -53,6 +53,7 @@ function setup_() {
 
   tex = canvas.getTexture(textures[BlockTypes.DIRT]);
   tex.setInterpolation(NEAREST, NEAREST);
+  document.getElementById("loading_bar").style.width = "5vmin";
   
   
 
@@ -70,15 +71,20 @@ function setup_() {
   }
 
   
+  document.getElementById("loading_bar").style.width = "10vmin";
 
   perspective(90, window.width/window.height, 0.1, 10000);
   let generated_chunks = 0;
+  let chunks_to_generate = world_size * world_size;
   for (let x = 0; x < world_size; x++) {
   for (let z = 0; z < world_size; z++) {
     chunks[x][z] = new Chunk(x*chunk_size, 0, z*chunk_size, generated_chunks);
     generated_chunks++;
+    document.getElementById("loading_bar").style.width = generated_chunks / chunks_to_generate * 85 + "vmin";
+    document.getElementById("loading_info").innerHTML += "chunk:" + generated_chunks + "/" + chunks_to_generate + "<br>";
+    await sleep(1);
   }}
-
+  document.getElementById("loading_info").innerHTML += "culling...";
   setInterval(function(){fps = frameRate();}, 100)
   running = true;
   
