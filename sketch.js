@@ -27,7 +27,7 @@ let fps = 0;
 p5.disableFriendlyErrors = true; //performance
 
 
-
+var rover;
 
 
 
@@ -59,7 +59,19 @@ async function setup_() {
   
   document.getElementById("loading_bar").style.width = "10vmin";
 
-  perspective(90, window.width/window.height, 0.1, 10000);
+  rover = createRoverCam();
+  rover.usePointerLock();    // optional; default is keyboard control only
+  rover.setState({           // optional
+    active: true,
+    enableControl: true,
+    position: [0,0,0],
+    rotation: [0,0,0],
+    offset: [0,20],
+    fov: 2,
+    speed: 1,
+    sensitivity: 0.05
+  });
+
   let generated_chunks = 0;
   let chunks_to_generate = world_size * world_size;
   for (let x = 0; x < world_size; x++) {
@@ -96,7 +108,7 @@ function draw() {
     }}
 
 
-    orbitControl(mouse_sens,mouse_sens,mouse_sens);
+   
 
     document.getElementById("topleft_info").innerHTML = `${Math.round(fps)} FPS`;
   }
@@ -108,3 +120,10 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   cam.perspective(2, width / height, 0.1, 1000);
 } 
+
+
+
+
+
+
+

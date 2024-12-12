@@ -44,8 +44,14 @@ async function generate_world(){
 	await sleep(500);
 
     document.getElementById("singleplayer_menu").style.display = "none";
-    world_size = Number(document.getElementById("world_size").value);
-    chunk_size = Number(document.getElementById("chunk_size").value);
+    if(document.getElementById("world_size").value == "" || document.getElementById("chunk_size").value == ""){
+		world_size = 3
+		chunk_size = 32
+	}else{
+		world_size = Number(document.getElementById("world_size").value);
+    	chunk_size = Number(document.getElementById("chunk_size").value);
+	}
+	
     await setup_();
 	document.getElementById("loading_bar").style.width = "85vmin";
 
