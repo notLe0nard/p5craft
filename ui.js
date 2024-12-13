@@ -45,8 +45,8 @@ async function generate_world(){
 
     document.getElementById("singleplayer_menu").style.display = "none";
     if(document.getElementById("world_size").value == "" || document.getElementById("chunk_size").value == ""){
-		world_size = 3
-		chunk_size = 32
+		world_size = 2
+		chunk_size = 16
 	}else{
 		world_size = Number(document.getElementById("world_size").value);
     	chunk_size = Number(document.getElementById("chunk_size").value);

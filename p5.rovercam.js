@@ -52,14 +52,14 @@ class RoverCam {
       mz2: [81, 81],  // q
       y1:  [65, 37],  // a, LEFT_ARROW
       y2:  [68, 39],  // d, RIGHT_ARROW
-      p1:  [82, 82],  // r
-      p2:  [70, 70],  // f
+      p1:  [32, 32],  // SPACE
+      p2:  [16, 16],  // SHIFT
       r1:  [90, 90],  // z
       r2:  [67, 67],  // c
       f1:  [107,187], // +
       f2:  [109,189], // -
-      e1:  [82, 82],  // r
-      e2:  [70, 70]   // f
+      e1:  [32, 32],  // SPACE
+      e2:  [16, 16]   // SHIFT
     };
   }
 
@@ -72,13 +72,13 @@ class RoverCam {
       this.pitch(p.movedY * this.sensitivity / 10); // mouse up/down
       if (p.keyIsDown(k.my1[0]) || p.keyIsDown(k.my1[1])) this.moveY( this.speed); // a
       if (p.keyIsDown(k.my2[0]) || p.keyIsDown(k.my2[1])) this.moveY(-this.speed); // d
-      if (p.keyIsDown(k.e1[0]) || p.keyIsDown(k.e1[1])) this.elevate(-this.speed); // r
-      if (p.keyIsDown(k.e2[0]) || p.keyIsDown(k.e2[1])) this.elevate(this.speed); // f
+      //if (p.keyIsDown(k.e1[0]) || p.keyIsDown(k.e1[1])) this.elevate(-this.speed); // r
+      //if (p.keyIsDown(k.e2[0]) || p.keyIsDown(k.e2[1])) this.elevate(this.speed); // f
     } else { // otherwise yaw/pitch with keys
       if (p.keyIsDown(k.y1[0]) || p.keyIsDown(k.y1[1])) this.yaw(-this.sensitivity); // a
       if (p.keyIsDown(k.y2[0]) || p.keyIsDown(k.y2[1])) this.yaw(this.sensitivity); // d
-      if (p.keyIsDown(k.p1[0]) || p.keyIsDown(k.p1[1])) this.pitch(-this.sensitivity); // r
-      if (p.keyIsDown(k.p2[0]) || p.keyIsDown(k.p2[1])) this.pitch(this.sensitivity); // f
+      //if (p.keyIsDown(k.p1[0]) || p.keyIsDown(k.p1[1])) this.pitch(-this.sensitivity); // r
+      //if (p.keyIsDown(k.p2[0]) || p.keyIsDown(k.p2[1])) this.pitch(this.sensitivity); // f
     }
     if (p.keyIsDown(k.mx1[0]) || p.keyIsDown(k.mx1[1])) this.moveX(this.speed); // w
     if (p.keyIsDown(k.mx2[0]) || p.keyIsDown(k.mx2[1])) this.moveX(-this.speed); // s
@@ -95,7 +95,7 @@ class RoverCam {
 
   // Primitive internal camera control methods
   moveX(speed) {
-    this.velocity.add(p5.Vector.mult(this.forward, speed));
+    this.velocity.add(p5.Vector.mult(this.forward2, speed));
   }
   moveY(speed) {
     this.velocity.add(p5.Vector.mult(this.right, speed));
@@ -187,8 +187,12 @@ class RoverCam {
     // Call the potentially overridden controller method
     this.controller();
 
-    this.forward = new p5.Vector(Math.cos(this.pan), Math.tan(this.tilt), Math.sin(this.pan));
+    this.forward = new p5.Vector(Math.cos(this.pan), Math.tan(this.tilt), Math.sin(this.pan)); //for looking
+    this.forward2 = new p5.Vector(Math.cos(this.pan), 0, Math.sin(this.pan)); //for moving
+    
     this.forward.normalize();
+    this.forward2.normalize();
+    
     this.right = new p5.Vector(Math.cos(this.pan - Math.PI / 2.0), 0, Math.sin(this.pan - Math.PI / 2.0));
     // TBD: handle roll command (using this.rot)
 

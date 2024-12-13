@@ -1,12 +1,10 @@
 //settings:
-let gravity = 0.002;
+let gravity = 1;
 let mouse_sens = 2;
 let target_fps = 60;
-let deceleration = 0.02; // Deceleration rate
-let aceleration = 0.02; // Aceleration rate
-let max_velo = 5;
 let chunk_size = 32;
 let world_size = 2;
+let walking_speed = .2;
 
 
 
@@ -20,7 +18,7 @@ let textures = [];
 let mouse_captured = false;
 
 
-let grass_block_texture;
+
 
 let fps = 0;
 
@@ -33,6 +31,9 @@ var rover;
 
 
 
+
+//movement
+let jump = false;
 
 
 
@@ -66,9 +67,9 @@ async function setup_() {
     enableControl: true,
     position: [0,0,0],
     rotation: [0,0,0],
-    offset: [0,20],
+    offset: [0,0],
     fov: 2,
-    speed: 1,
+    speed: walking_speed,
     sensitivity: 0.05
   });
 
@@ -85,6 +86,8 @@ async function setup_() {
   document.getElementById("loading_info").innerHTML = "culling...";
   setInterval(function(){fps = frameRate();}, 100)
   running = true;
+
+
   
 }
 
@@ -97,20 +100,49 @@ function draw() {
 
     let c = color(255, 0, 0);
     lights();
-    //pointLight(color(255, 0, 0), 0, -150, 0);
-    //pointLight(color(0, 255, 0), 0, 150, 0);
-    //pointLight(color(0, 0, 255), 0, 0, 150);
 
     translate(0,0,0);
+
+    //render chunks
     for (let x = 0; x < world_size; x++) {
     for (let z = 0; z < world_size; z++) {
       chunks[x][z].render();
     }}
 
 
-   
+    
+    //calculate what chunk the player is in
+    let chunkx = Math.floor(((round(rover.position.x/10)))/chunk_size);
+    let chunkz = Math.floor(((round(rover.position.z/10)))/chunk_size);
 
-    document.getElementById("topleft_info").innerHTML = `${Math.round(fps)} FPS`;
+    let height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x/10)-chunkx*chunk_size][round(rover.position.z/10)-chunkz*chunk_size] * 10 - 20;
+
+    
+    //gravity
+    if(rover.position.y < height_to_be + 0.4 && rover.position.y > height_to_be - 0.4){
+      rover.position.y = height_to_be;
+    }
+    else{
+      if(rover.position.y < height_to_be){
+        rover.velocity.y += gravity// * (height_to_be - rover.position.y);
+      }
+      if(rover.position.y > height_to_be){
+        rover.velocity.y -= gravity// * (rover.position.y - height_to_be);
+      }
+      
+    }
+    
+    
+    if(jump){
+      rover.velocity.y = -10;
+    }
+    document.getElementById("topleft_info").innerHTML = `
+    ${Math.round(fps)} FPS<br>
+    X: ${round(rover.position.x/10)} Y: ${round(rover.position.y/10)} Z: ${round(rover.position.z/10)}<br>
+    Chunk X: ${chunkx} Z: ${chunkz}<br>    
+    Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}`;
+
+    
   }
 }
 
@@ -123,7 +155,19 @@ function windowResized() {
 
 
 
+function keyPressed(){
+  //print(keyCode);
+  if(keyCode == 32){
+    jump = true;
+  }
+}
 
+function keyReleased(){
+  //print(keyCode);
+  if(keyCode == 32){
+    jump = false;
+  }
+}
 
 
 

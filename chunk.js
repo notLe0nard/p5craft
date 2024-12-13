@@ -29,8 +29,6 @@ class Chunk{
     
 
     this.blocks = new Array(depth);
-
-
     for (let i = 0; i < depth; i++) {
       this.blocks[i] = new Array(rows);
       for (let j = 0; j < rows; j++) {
@@ -38,12 +36,22 @@ class Chunk{
       }
     }
 
+
+
+    this.collision_map = new Array(depth);
+    for (let i = 0; i < depth; i++) {
+      this.collision_map[i] = new Array(rows);
+    }
+
+
+
     for (let x = this.position.x; x < chunk_size + this.position.x; x++) {
     for (let y = this.position.y; y < chunk_size + this.position.y; y++) {
     for (let z = this.position.z; z < chunk_size + this.position.z; z++) {
       let height_map = noise(x/20,z/20);
       
       if(y==round(map(height_map, 0,1,0,chunk_size))){
+        this.collision_map[x-this.position.x][z-this.position.z] = y;
         block_type = BlockTypes.GRASS_BLOCK; //
       }else if(y>map(height_map, 0,1,0,chunk_size) && y<map(height_map, 0,1,0,chunk_size)+3){
         block_type = BlockTypes.DIRT;
@@ -61,8 +69,9 @@ class Chunk{
 
       
     }}}
+    console.table(this.collision_map);
 
-
+    
     for (let x = this.position.x; x < chunk_size + this.position.x; x++) {
     for (let y = this.position.y; y < chunk_size + this.position.y; y++) {
     for (let z = this.position.z; z < chunk_size + this.position.z; z++) {
