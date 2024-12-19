@@ -39,6 +39,7 @@ class RoverCam {
     this.reset();
     this.active = true; // use the setActive method
     this.enableControl = true; // used to enable/disable controls
+    this.cam = createCamera();
     if(instance !== undefined) this.p5 = instance; 
     else this.p5 = p5.instance;
     if(this.p5 !== null) 
@@ -200,7 +201,7 @@ class RoverCam {
     this.position.add(this.velocity);
     let position = p5.Vector.sub(this.position, p5.Vector.mult(this.right,this.offset[1]));
     let center = p5.Vector.add(position, this.forward);
-    this.p5.camera(position.x, position.y+this.offset[0], position.z, center.x, center.y+this.offset[0], center.z, this.up.x, this.up.y, this.up.z);
+    this.cam.camera(position.x, position.y+this.offset[0], position.z, center.x, center.y+this.offset[0], center.z, this.up.x, this.up.y, this.up.z);
   }
 
   clamp(aNumber, aMin, aMax) {

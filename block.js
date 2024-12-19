@@ -31,7 +31,7 @@ class Block {
     this.position = {x:posX,y:posY,z:posZ};
     
     this.chunk_id = chunk_id;
-    this.blocked_faces = [false,false,false,false,false,false]
+    this.blocked_faces = [false,false,false,false,false,false];
   }
 
   draw(size){
@@ -44,10 +44,10 @@ class Block {
       if(this.type != BlockTypes.DIRT){
         // Front face (mapped to the top-left square of the atlas)
         if(this.blocked_faces[0] == false){
-          vertex(-size / 2, -size / 2, size / 2, 0, 0);          // Top-left
-          vertex(size / 2, -size / 2, size / 2, 1 / 2, 0);       // Top-right
-          vertex(size / 2, size / 2, size / 2, 1 / 2, 1 / 3);    // Bottom-right
-          vertex(-size / 2, size / 2, size / 2, 0, 1 / 3);       // Bottom-left
+          vertex(-size / 2, -size / 2, size / 2     , 0, 0);          // Top-left
+          vertex(size / 2, -size / 2, size / 2      , 1 / 2, 0);       // Top-right
+          vertex(size / 2, size / 2, size / 2       , 1 / 2, 1 / 3);    // Bottom-right
+          vertex(-size / 2, size / 2, size / 2      , 0, 1 / 3);       // Bottom-left
         }
 
         // Back face

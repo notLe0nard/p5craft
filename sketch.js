@@ -18,6 +18,18 @@ let textures = [];
 let mouse_captured = false;
 
 
+//chunk cordinates the player is in
+let chunkx = 0;
+let chunkz = 0;
+
+//cordinates of the block the player is facing
+let cubeX = 0;
+let cubeY = 0;
+let cubeZ = 0;
+
+let cubeX_relative = 0; 
+//y is the same
+let cubeZ_relative = 0;
 
 
 let fps = 0;
@@ -112,8 +124,10 @@ function draw() {
 
     
     //calculate what chunk the player is in
-    let chunkx = Math.floor(((round(rover.position.x/10)))/chunk_size);
-    let chunkz = Math.floor(((round(rover.position.z/10)))/chunk_size);
+    chunkx = Math.floor(((round(rover.position.x/10)))/chunk_size);
+    chunkz = Math.floor(((round(rover.position.z/10)))/chunk_size);
+
+
 
     let height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x/10)-chunkx*chunk_size][round(rover.position.z/10)-chunkz*chunk_size] * 10 - 20;
 
@@ -136,11 +150,33 @@ function draw() {
     if(jump){
       rover.velocity.y = -10;
     }
+
+
+    // Position the object in front of the camera
+    let distance = 20; // Distance from the camera
+    cubeX = rover.position.x + cos(rover.pan) * cos(rover.tilt) * distance;
+    cubeY = rover.position.y + sin(rover.tilt) * distance;
+    cubeZ = rover.position.z + sin(rover.pan) * cos(rover.tilt) * distance;
+
+    //snap to blocks
+    cubeX = round(cubeX/10);
+    cubeY = round(cubeY/10);
+    cubeZ = round(cubeZ/10);
+
+    //relative to chunk
+    cubeX_relative = cubeX-chunkx*chunk_size;
+    cubeZ_relative = cubeZ-chunkz*chunk_size;
+
+    
+
+    draw_block_selector(cubeX,cubeY,cubeZ);
+
     document.getElementById("topleft_info").innerHTML = `
     ${Math.round(fps)} FPS<br>
     X: ${round(rover.position.x/10)} Y: ${round(rover.position.y/10)} Z: ${round(rover.position.z/10)}<br>
     Chunk X: ${chunkx} Z: ${chunkz}<br>    
-    Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}`;
+    Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}<br>
+    Looking: X:${round(rover.pan)} Y:${round(cubeY)} Z:${round(cubeZ)}`;
 
     
   }
@@ -156,9 +192,13 @@ function windowResized() {
 
 
 function keyPressed(){
-  //print(keyCode);
+  print(keyCode);
   if(keyCode == 32){
     jump = true;
+  }
+  if(running && keyCode == 66){
+    chunks[chunkx][chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = BlockTypes.STONE;
+    chunks[chunkx][chunkz].cull();
   }
 }
 
@@ -168,6 +208,4 @@ function keyReleased(){
     jump = false;
   }
 }
-
-
 

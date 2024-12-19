@@ -66,12 +66,20 @@ class Chunk{
       
       this.blocks[x-this.position.x][y-this.position.y][z-this.position.z] =  new Block(x, y, z, block_type, this.block_id, this.id);
       this.block_id++;
-
-      
     }}}
     console.table(this.collision_map);
 
+
+    this.cull();
+    this.chunk_generated = true;
+    console.table(this.generated_blocks);
+
     
+
+
+  }
+  cull(){
+    this.chunk_generated = false;
     for (let x = this.position.x; x < chunk_size + this.position.x; x++) {
     for (let y = this.position.y; y < chunk_size + this.position.y; y++) {
     for (let z = this.position.z; z < chunk_size + this.position.z; z++) {
@@ -97,7 +105,6 @@ class Chunk{
 
 
     this.chunk_generated = true;
-    console.table(this.generated_blocks);
   }
 
 
@@ -108,5 +115,6 @@ class Chunk{
         model(this.shapes[i]);
       }
     }
+    texture(0);
   }
 }

@@ -99,12 +99,13 @@ body, html{
   justify-content: center;
   align-items: center;
   text-shadow: .4vmin .4vmin 0px #000000b4;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
   padding: 0;
 }
 .button:hover{
-  background-image: url("assets/textures/gui/button_highlighted.png");
-  transform: scale(1.05);
+  /*background-image: url("assets/textures/gui/button_highlighted.png");*/
+  filter: grayscale(1) sepia(1) hue-rotate(200deg) saturate(2); 
+  transform: scale(1.02);
 }
 
 *{
