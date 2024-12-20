@@ -1,25 +1,39 @@
 const BlockTypes = {
-  AIR: 0,
-  GRASS_BLOCK: 1,
-  DIRT: 2,
-  STONE: 3,
+  AIR:          0,
+  GRASS_BLOCK:  1,
+  DIRT:         2,
+  STONE:        3,
+  STONE_BRICKS: 4,
+  COBBLESTONE:  5,
+  BEDROCK:      6,
+  OAK_LOG:      7,
+  OAK_LEAVES:   8,
+  OAK_PLANKS:   9,
+  SHORT_GRASS:  10,
+  
 };
 
 
 
 function loadBlockTextures(canvas){
-  textures[BlockTypes.GRASS_BLOCK] = loadImage("assets/textures/blocks/grass.png");
-  textures[BlockTypes.STONE] = loadImage("assets/textures/blocks/stone.png");
-  textures[BlockTypes.DIRT] = loadImage("assets/textures/blocks/dirt.png");
+  textures[BlockTypes.GRASS_BLOCK]  = loadImage("assets/textures/blocks/grass_block.png");
+  textures[BlockTypes.DIRT]         = loadImage("assets/textures/blocks/dirt.png");
+  textures[BlockTypes.STONE]        = loadImage("assets/textures/blocks/stone.png");
+  textures[BlockTypes.STONE_BRICKS] = loadImage("assets/textures/blocks/stone_bricks.png");
+  textures[BlockTypes.COBBLESTONE]  = loadImage("assets/textures/blocks/cobblestone.png");
+  textures[BlockTypes.BEDROCK]      = loadImage("assets/textures/blocks/bedrock.png");
+  textures[BlockTypes.OAK_LOG]      = loadImage("assets/textures/blocks/oak_log.png");
+  textures[BlockTypes.OAK_LEAVES]   = loadImage("assets/textures/blocks/oak_leaves.png");
+  textures[BlockTypes.OAK_PLANKS]   = loadImage("assets/textures/blocks/oak_planks.png");
+  textures[BlockTypes.SHORT_GRASS]  = loadImage("assets/textures/blocks/short_grass.png");
 
-  tex = canvas.getTexture(textures[BlockTypes.GRASS_BLOCK]);
-  tex.setInterpolation(NEAREST, NEAREST);
 
-  tex = canvas.getTexture(textures[BlockTypes.STONE]);
-  tex.setInterpolation(NEAREST, NEAREST);
-
-  tex = canvas.getTexture(textures[BlockTypes.DIRT]);
-  tex.setInterpolation(NEAREST, NEAREST);
+  for(let x = 1; x <  textures.length; x++){
+    tex = canvas.getTexture(textures[x]);
+    tex.setInterpolation(NEAREST, NEAREST);
+  }
+  
+  
 }
 
 
@@ -41,7 +55,7 @@ class Block {
       translate(this.position.x*10, this.position.y*10, this.position.z*10);
       beginShape(QUADS);
       
-      if(this.type != BlockTypes.DIRT){
+      if(this.type == BlockTypes.GRASS_BLOCK){
         // Front face (mapped to the top-left square of the atlas)
         if(this.blocked_faces[0] == false){
           vertex(-size / 2, -size / 2, size / 2     , 0, 0);          // Top-left

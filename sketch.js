@@ -196,16 +196,26 @@ function keyPressed(){
   if(keyCode == 32){
     jump = true;
   }
-  if(running && keyCode == 66){
-    chunks[chunkx][chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = BlockTypes.STONE;
-    chunks[chunkx][chunkz].cull();
-  }
+  
 }
 
 function keyReleased(){
   //print(keyCode);
   if(keyCode == 32){
     jump = false;
+  }
+}
+
+function mousePressed(){
+  if(mouseButton == RIGHT){
+    if(running){
+
+      chunks[chunkx][chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = selected_slot;
+      if(chunks[chunkx][chunkz].generated_blocks.includes(selected_slot) == false && selected_slot != BlockTypes.AIR){
+        chunks[chunkx][chunkz].generated_blocks.push(selected_slot);
+      }
+      chunks[chunkx][chunkz].cull();
+    }
   }
 }
 

@@ -194,3 +194,50 @@ div#loading_bar{
   font-size: 1vmin;
   align-self: left;
 }
+
+#hud{
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#crosshair{
+  align-self: center;
+  justify-self: center;
+
+}
+
+#hotbar{
+  align-self: flex-end;
+  display: flex;
+}
+#hotbar_img{
+  height: 5vmin;
+}
+#hotbar_selector{
+  height: 5.3vmin;
+  position: absolute;
+  transform: translateY(-.2vmin) translateX(4.33vmin);
+  transition: transform .1s ease;
+}
+
+.centerer{
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}

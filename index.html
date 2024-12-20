@@ -16,6 +16,8 @@
     <script src="sketch.js"></script>
     <script src="chunk.js"></script>
     <script src="block_selector.js"></script>
+    
+    
 
 
     
@@ -27,7 +29,7 @@
           <div  class="button" id="multiplayer" >Multiplayer</div>
           <div  class="button" id="options"     >Options</div>
       </div>         <!-- main_version.day.month.year -->
-      <p id="bottom_left_text">P5Craft 0.19.12.24</p>
+      <p id="bottom_left_text">P5Craft 0.20.12.24</p>
     </div>
     <div id="singleplayer_menu">
           <div id="buttons_singleplayer">
@@ -38,7 +40,18 @@
               <div  class="button" id="back" onclick="open_main_menu();">Back</div>
           </div>
     </div>
-    <p id="topleft_info">60 FPS</p>
+    <div id="hud">
+      <div class="centerer">
+        <img src="assets/textures/gui/hud/crosshair.png" alt="+" id="crosshair">
+      </div>
+      <p id="topleft_info">60 FPS</p>
+
+      
+      <div id="hotbar">
+        <img src="assets/textures/gui/hud/hotbar.png" alt="" id="hotbar_img">
+        <img src="assets/textures/gui/hud/hotbar_selection.png" alt="" id="hotbar_selector">
+      </div>
+    </div>
     <script src="ui.js"></script>
 
     <div id="loading_screen">
@@ -47,6 +60,7 @@
       <p id="loading_info"></p>
       
     </div>
+    <script src="hotbar.js"></script>
     
   </body>
 </html>
