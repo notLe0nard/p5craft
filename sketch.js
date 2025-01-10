@@ -172,7 +172,7 @@ function draw() {
     draw_block_selector(cubeX,cubeY,cubeZ);
 
     document.getElementById("topleft_info").innerHTML = `
-    ${Math.round(fps)} FPS<br>
+    ${Math.round(fps)} FPS Frametime: ${Math.round(deltaTime)}<br>
     X: ${round(rover.position.x/10)} Y: ${round(rover.position.y/10)} Z: ${round(rover.position.z/10)}<br>
     Chunk X: ${chunkx} Z: ${chunkz}<br>    
     Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}<br>
@@ -215,6 +215,15 @@ function mousePressed(){
         chunks[chunkx][chunkz].generated_blocks.push(selected_slot);
       }
       chunks[chunkx][chunkz].cull();
+      chunks[chunkx][chunkz].create_colission_map();
+    }
+  }
+  else if(mouseButton == LEFT){
+    if(running){
+      chunks[chunkx][chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = BlockTypes.AIR;
+      chunks[chunkx][chunkz].cull();
+      chunks[chunkx][chunkz].create_colission_map();
+      
     }
   }
 }

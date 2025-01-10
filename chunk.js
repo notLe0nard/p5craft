@@ -1,7 +1,6 @@
 class Chunk{
   
   constructor(posX,posY,posZ,id) {
-
     this.id = id;
     this.position = {x:posX,y:posY,z:posZ};
     this.block_size = 10;
@@ -107,6 +106,21 @@ class Chunk{
     this.chunk_generated = true;
   }
 
+
+  create_colission_map(){
+    for (let x = this.position.x; x < chunk_size + this.position.x; x++) {
+      for (let y = this.position.y; y < chunk_size + this.position.y; y++) {
+        for (let z = this.position.z; z < chunk_size + this.position.z; z++) {
+          if(y > 0){
+            if(this.blocks[x-this.position.x][(y-this.position.y)-1][z-this.position.z].type == BlockTypes.AIR &&
+              this.blocks[x-this.position.x][y-this.position.y][z-this.position.z].type != BlockTypes.AIR){
+              this.collision_map[x-this.position.x][z-this.position.z] = y;
+            } 
+          } 
+        }
+      }
+    }
+  }
 
   render(){
     if(this.chunk_generated){

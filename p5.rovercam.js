@@ -131,13 +131,8 @@ class RoverCam {
     // ffd8 - click into pointerlock example based on:
     // https://p5js.org/reference/#/p5/exitPointerLock
     document.addEventListener('click', () => {
-      if (!RoverCam.pointerLock) {
         RoverCam.pointerLock = true;
         instance.requestPointerLock();
-      } else {
-        instance.exitPointerLock();
-        RoverCam.pointerLock = false;
-      }
     }, false);
     document.addEventListener('pointerlockchange', RoverCam.onPointerlockChange, false);
   }
