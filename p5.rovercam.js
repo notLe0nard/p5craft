@@ -31,6 +31,8 @@
 //       w/s : forward/backward
 //       e/q : up/down
 
+let block_xplus;
+
 class RoverCam {
   constructor(instance) {
     this.sensitivity = 0.02;
@@ -40,6 +42,11 @@ class RoverCam {
     this.active = true; // use the setActive method
     this.enableControl = true; // used to enable/disable controls
     this.cam = createCamera();
+
+
+    //the block in front of the player
+    this.colission = {xp:0};
+
     if(instance !== undefined) this.p5 = instance; 
     else this.p5 = p5.instance;
     if(this.p5 !== null) 
@@ -192,8 +199,59 @@ class RoverCam {
     this.right = new p5.Vector(Math.cos(this.pan - Math.PI / 2.0), 0, Math.sin(this.pan - Math.PI / 2.0));
     // TBD: handle roll command (using this.rot)
 
+
     this.velocity.mult(this.friction);
-    this.position.add(this.velocity);
+    
+    
+    //this.position.add(this.velocity);
+    
+  
+    
+    this.colission.xp = chunks[chunkx][chunkz].blocks[round((this.position.x+10)/10)-chunkx*chunk_size][round((this.position.y+10)/10)][round(this.position.z/10)-chunkz*chunk_size ].type
+    
+    
+    
+    if(this.colission.xp != BlockTypes.AIR){
+    draw_block_selector(                              round((this.position.x+10)/10)-chunkx*chunk_size, round((this.position.y+10)/10), round(this.position.z/10)-chunkz*chunk_size,color(255,255,0,50),color(255,255,0,50));
+    }
+
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.position.z += this.velocity.z;
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //this is fucking trash
+    // the height of the block that in the positive x direction                here
+    //block_xplus = chunks[chunkx][chunkz].collision_map[round((this.position.x + 10 )/10)-chunkx*chunk_size][round(this.position.z/10)-chunkz*chunk_size] * 10 - 20;
+
+    //draw_block_selector(round((this.position.x + 10 )/10),block_xplus/10+2,round(this.position.z/10),color(255,255,0,50),color(255,255,0,50));
+
+
+    // the height of the block that in the negative x direction                  here
+    //let block_xminu = chunks[chunkx][chunkz].collision_map[round((this.position.x - 1 )/10)-chunkx*chunk_size][round(this.position.z/10)-chunkz*chunk_size] * 10 - 20;
+
+
+    // if the player x velocity is bigger than 0 so positive and the block infront of the player (block_xplus) y position + 4 is bigger than player y stop the player from moving on x. he can still move back because the x velocity will be negative then
+    //if(!(this.velocity.x > 0 && block_xplus + 8 < this.position.y && round((this.position.x + 10)/10)*10 - this.position.x+5 < 11)){ //this is really fucking bad
+    //  this.position.x += this.velocity.x;
+    //}
+    //console.log(    round((this.position.x + 10)/10)*10  - this.position.x+5   );
+    
+
     let position = p5.Vector.sub(this.position, p5.Vector.mult(this.right,this.offset[1]));
     let center = p5.Vector.add(position, this.forward);
     this.cam.camera(position.x, position.y+this.offset[0], position.z, center.x, center.y+this.offset[0], center.z, this.up.x, this.up.y, this.up.z);

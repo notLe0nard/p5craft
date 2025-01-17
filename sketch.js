@@ -2,8 +2,8 @@
 let gravity = 1;
 let mouse_sens = 2;
 let target_fps = 60;
-let chunk_size = 32;
-let world_size = 2;
+let chunk_size;
+let world_size;
 let walking_speed = .2;
 
 
@@ -40,7 +40,7 @@ p5.disableFriendlyErrors = true; //performance
 var rover;
 
 
-
+let height_to_be;
 
 
 
@@ -129,7 +129,7 @@ function draw() {
 
 
 
-    let height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x/10)-chunkx*chunk_size][round(rover.position.z/10)-chunkz*chunk_size] * 10 - 20;
+    height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x/10)-chunkx*chunk_size][round(rover.position.z/10)-chunkz*chunk_size] * 10 - 20;
 
     
     //gravity
@@ -139,9 +139,11 @@ function draw() {
     else{
       if(rover.position.y < height_to_be){
         rover.velocity.y += gravity// * (height_to_be - rover.position.y);
+      }else{
+        rover.velocity.y = 0;
       }
       if(rover.position.y > height_to_be){
-        rover.velocity.y -= gravity// * (rover.position.y - height_to_be);
+        //rover.position.y = height_to_be;
       }
       
     }
@@ -166,17 +168,20 @@ function draw() {
     //relative to chunk
     cubeX_relative = cubeX-chunkx*chunk_size;
     cubeZ_relative = cubeZ-chunkz*chunk_size;
-
     
+    draw_block_selector(cubeX,cubeY,cubeZ,color(0,0,0,50),color(0,0,0,50));
 
-    draw_block_selector(cubeX,cubeY,cubeZ);
+
+
+
 
     document.getElementById("topleft_info").innerHTML = `
     ${Math.round(fps)} FPS Frametime: ${Math.round(deltaTime)}<br>
-    X: ${round(rover.position.x/10)} Y: ${round(rover.position.y/10)} Z: ${round(rover.position.z/10)}<br>
+    X: ${round(rover.position.x)} Y: ${round(rover.position.y)} Z: ${round(rover.position.z)}<br>
     Chunk X: ${chunkx} Z: ${chunkz}<br>    
     Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}<br>
-    Looking: X:${round(rover.pan)} Y:${round(cubeY)} Z:${round(cubeZ)}`;
+    Looking: X:${round(rover.pan)} Y:${round(cubeY)} Z:${round(cubeZ)}<br>
+    heightTB: ${round(height_to_be)} posY: ${round(rover.position.y)} block_xplus: ${round(block_xplus)}`;
 
     
   }
