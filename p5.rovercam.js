@@ -207,13 +207,8 @@ class RoverCam {
     
   
     
-    this.colission.xp = chunks[chunkx][chunkz].blocks[round((this.position.x+10)/10)-chunkx*chunk_size][round((this.position.y+10)/10)][round(this.position.z/10)-chunkz*chunk_size ].type
+
     
-    
-    
-    if(this.colission.xp != BlockTypes.AIR){
-    draw_block_selector(                              round((this.position.x+10)/10)-chunkx*chunk_size, round((this.position.y+10)/10), round(this.position.z/10)-chunkz*chunk_size,color(255,255,0,50),color(255,255,0,50));
-    }
 
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;

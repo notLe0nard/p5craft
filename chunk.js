@@ -1,23 +1,11 @@
 class Chunk{
-  
   constructor(posX,posY,posZ,id) {
     this.id = id;
     this.position = {x:posX,y:posY,z:posZ};
-    this.block_size = 10;
+    this.block_size = 1;
     this.block_id = 0;
     this.shapes = [];
-    this.generated_blocks = []; //array of blocks with different textures to render because p5 texture and build geometry do not mix (obviusly)
-    //for (let x = 0; x < 5; x++) {
-    //  for (let y = 0; y < 5; y++) {
-    //    for (let z = 0; z < 5; z++) {
-    //      if(Math.random() > 0.5){
-    //        this.blocks[this.block_id] = new Block(x*this.block_size, y*this.block_size, z*this.block_size, "grass_block", this.block_id, this.id);
-    //        console.log(x,z);
-    //        this.block_id++;
-    //      }
-    //    }
-    //  }
-    //}
+    this.generated_blocks = [];
 
     
     const depth = chunk_size; // Number of 2D arrays
@@ -94,7 +82,7 @@ class Chunk{
         for (let y = test.position.y; y < chunk_size + test.position.y; y++) {
         for (let z = test.position.z; z < chunk_size + test.position.z; z++) {
           if(test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].type == test.generated_blocks[i]){
-            test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].draw(10);
+            test.blocks[x-test.position.x][y-test.position.y][z-test.position.z].draw();
           }   
         }}}
       })

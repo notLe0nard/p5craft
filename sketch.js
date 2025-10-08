@@ -1,10 +1,10 @@
 //settings:
-let gravity = 1;
+let gravity = .1;
 let mouse_sens = 2;
 let target_fps = 60;
 let chunk_size;
 let world_size;
-let walking_speed = .2;
+let walking_speed = .02;
 
 
 
@@ -122,14 +122,12 @@ function draw() {
     }}
 
 
+  
+    chunkx = get_chunk_from_cordinates(rover.position.x,rover.position.z).x;
+    chunky = get_chunk_from_cordinates(rover.position.x,rover.position.z).y;
     
-    //calculate what chunk the player is in
-    chunkx = Math.floor(((round(rover.position.x/10)))/chunk_size);
-    chunkz = Math.floor(((round(rover.position.z/10)))/chunk_size);
 
-
-
-    height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x/10)-chunkx*chunk_size][round(rover.position.z/10)-chunkz*chunk_size] * 10 - 20;
+    height_to_be = chunks[chunkx,chunky].collision_map[round(rover.position.x)-chunkx*chunk_size][round(rover.position.z)-chunkz*chunk_size] -2;
 
     
     //gravity
@@ -150,20 +148,20 @@ function draw() {
     
     
     if(jump){
-      rover.velocity.y = -10;
+      rover.velocity.y = -1;
     }
 
 
     // Position the object in front of the camera
-    let distance = 20; // Distance from the camera
+    let distance = 2; // Distance from the camera
     cubeX = rover.position.x + cos(rover.pan) * cos(rover.tilt) * distance;
     cubeY = rover.position.y + sin(rover.tilt) * distance;
     cubeZ = rover.position.z + sin(rover.pan) * cos(rover.tilt) * distance;
 
     //snap to blocks
-    cubeX = round(cubeX/10);
-    cubeY = round(cubeY/10);
-    cubeZ = round(cubeZ/10);
+    cubeX = round(cubeX);
+    cubeY = round(cubeY);
+    cubeZ = round(cubeZ);
 
     //relative to chunk
     cubeX_relative = cubeX-chunkx*chunk_size;
