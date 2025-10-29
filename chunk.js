@@ -54,12 +54,10 @@ class Chunk{
       this.blocks[x-this.position.x][y-this.position.y][z-this.position.z] =  new Block(x, y, z, block_type, this.block_id, this.id);
       this.block_id++;
     }}}
-    console.table(this.collision_map);
 
 
     this.cull();
     this.chunk_generated = true;
-    console.table(this.generated_blocks);
 
     
 
@@ -102,7 +100,7 @@ class Chunk{
           if(y > 0){
             if(this.blocks[x-this.position.x][(y-this.position.y)-1][z-this.position.z].type == BlockTypes.AIR &&
               this.blocks[x-this.position.x][y-this.position.y][z-this.position.z].type != BlockTypes.AIR){
-              this.collision_map[x-this.position.x][z-this.position.z] = y;
+              this.collision_map[x][z] = y;
             } 
           } 
         }
@@ -118,5 +116,11 @@ class Chunk{
       }
     }
     texture(0);
+  }
+
+  renderChunkBorders(){
+    stroke(color(255,0,255,255)); 
+    strokeWeight(0.1); // Border thickness
+    line(this.position.x, 0, this.position.z, this.position.x, chunk_size, this.position.z)
   }
 }

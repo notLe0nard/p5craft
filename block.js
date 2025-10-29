@@ -49,7 +49,7 @@ class Block {
   }
 
   draw(){
-
+    noStroke();
     if(this.type == BlockTypes.AIR){return;}
       push();
       translate(this.position.x, this.position.y, this.position.z);

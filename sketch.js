@@ -1,5 +1,5 @@
 //settings:
-let gravity = .1;
+let gravity = .01;
 let mouse_sens = 2;
 let target_fps = 60;
 let chunk_size;
@@ -119,16 +119,21 @@ function draw() {
     for (let x = 0; x < world_size; x++) {
     for (let z = 0; z < world_size; z++) {
       chunks[x][z].render();
+      chunks[x][z].renderChunkBorders();
+      
     }}
 
 
   
-    chunkx = get_chunk_from_cordinates(rover.position.x,rover.position.z).x;
-    chunky = get_chunk_from_cordinates(rover.position.x,rover.position.z).y;
+    chunkx = Math.floor((round(rover.position.x))/chunk_size);
+    console.log(round((round(rover.position.x))/chunk_size));
+
+    
+    chunkz = Math.floor((round(rover.position.z))/chunk_size);
     
 
-    height_to_be = chunks[chunkx,chunky].collision_map[round(rover.position.x)-chunkx*chunk_size][round(rover.position.z)-chunkz*chunk_size] -2;
-
+    height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x)-chunkx*chunk_size][round(rover.position.z)-chunkz*chunk_size] -2;
+    //height_to_be = 14
     
     //gravity
     if(rover.position.y < height_to_be + 0.4 && rover.position.y > height_to_be - 0.4){
@@ -141,14 +146,14 @@ function draw() {
         rover.velocity.y = 0;
       }
       if(rover.position.y > height_to_be){
-        //rover.position.y = height_to_be;
+        rover.position.y = height_to_be;
       }
       
     }
     
     
     if(jump){
-      rover.velocity.y = -1;
+      //rover.velocity.y = -1;
     }
 
 
@@ -198,6 +203,7 @@ function keyPressed(){
   print(keyCode);
   if(keyCode == 32){
     jump = true;
+    rover.velocity.y = -.5
   }
   
 }

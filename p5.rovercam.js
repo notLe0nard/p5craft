@@ -200,19 +200,18 @@ class RoverCam {
     // TBD: handle roll command (using this.rot)
 
 
-    this.velocity.mult(this.friction);
+    //this.velocity.mult(this.friction);
     
+    this.velocity.x *= this.friction;
+    this.velocity.y *= .99;
     
-    //this.position.add(this.velocity);
-    
-  
-    
+    this.velocity.z *= this.friction;
+
+
 
     
-
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-    this.position.z += this.velocity.z;
+    this.position.add(this.velocity);
+    
   
     
 
