@@ -1,10 +1,11 @@
 //settings:
-let gravity = .01;
+let gravity = .08;
 let mouse_sens = 2;
 let target_fps = 60;
 let chunk_size;
 let world_size;
-let walking_speed = .02;
+let walking_speed = .05;
+let sprinting_speed = .07;
 
 
 
@@ -13,6 +14,8 @@ let walking_speed = .02;
 
 //no changing
 let running = false;
+let delta = 0.0;
+let sprint = false;
 
 let textures = [];
 let mouse_captured = false;
@@ -30,6 +33,10 @@ let cubeZ = 0;
 let cubeX_relative = 0; 
 //y is the same
 let cubeZ_relative = 0;
+
+let block_chunkx = 0;
+let block_chunkz = 0;
+
 
 
 let fps = 0;
@@ -59,7 +66,7 @@ async function setup_() {
   translate(0,0,0);
   //textureMode(NORMAL);
 
-  //frameRate(target_fps);
+  frameRate(target_fps);
 
   noStroke(); // kein drahtgitter
 
@@ -105,6 +112,12 @@ async function setup_() {
 
 function draw() {
   if(running){
+    delta = deltaTime/(1000/20);
+    if (sprint){
+      rover.speed = sprinting_speed;
+    }else{
+      rover.speed = walking_speed;
+    }
 
     
     
@@ -125,23 +138,22 @@ function draw() {
 
 
   
-    chunkx = Math.floor((round(rover.position.x))/chunk_size);
-    console.log(round((round(rover.position.x))/chunk_size));
-
-    
+    chunkx = Math.floor((round(rover.position.x))/chunk_size);    
     chunkz = Math.floor((round(rover.position.z))/chunk_size);
     
 
+    
+
+
     height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x)-chunkx*chunk_size][round(rover.position.z)-chunkz*chunk_size] -2;
-    //height_to_be = 14
     
     //gravity
-    if(rover.position.y < height_to_be + 0.4 && rover.position.y > height_to_be - 0.4){
+    if(rover.position.y < height_to_be + 0.001 && rover.position.y > height_to_be - 0.001){
       rover.position.y = height_to_be;
     }
     else{
       if(rover.position.y < height_to_be){
-        rover.velocity.y += gravity// * (height_to_be - rover.position.y);
+        rover.velocity.y += gravity * delta;
       }else{
         rover.velocity.y = 0;
       }
@@ -150,12 +162,6 @@ function draw() {
       }
       
     }
-    
-    
-    if(jump){
-      //rover.velocity.y = -1;
-    }
-
 
     // Position the object in front of the camera
     let distance = 2; // Distance from the camera
@@ -168,25 +174,25 @@ function draw() {
     cubeY = round(cubeY);
     cubeZ = round(cubeZ);
 
+
+    block_chunkx = Math.floor((round(cubeX))/chunk_size);    
+    block_chunkz = Math.floor((round(cubeZ))/chunk_size);
+
+
     //relative to chunk
-    cubeX_relative = cubeX-chunkx*chunk_size;
-    cubeZ_relative = cubeZ-chunkz*chunk_size;
+    cubeX_relative = cubeX-block_chunkx*chunk_size;
+    cubeZ_relative = cubeZ-block_chunkz*chunk_size;
     
-    draw_block_selector(cubeX,cubeY,cubeZ,color(0,0,0,50),color(0,0,0,50));
-
-
-
-
+    draw_block_selector(cubeX,cubeY,cubeZ,color(0,0,0,0),color(0,0,0,255),0.01);
 
     document.getElementById("topleft_info").innerHTML = `
-    ${Math.round(fps)} FPS Frametime: ${Math.round(deltaTime)}<br>
+    ${Math.round(fps)} FPS Frametime: ${deltaTime}<br>
+    delta: ${delta}<br>
     X: ${round(rover.position.x)} Y: ${round(rover.position.y)} Z: ${round(rover.position.z)}<br>
     Chunk X: ${chunkx} Z: ${chunkz}<br>    
     Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}<br>
-    Looking: X:${round(rover.pan)} Y:${round(cubeY)} Z:${round(cubeZ)}<br>
+    Block: X:${cubeX} Y:${cubeY} Z:${cubeZ}<br>
     heightTB: ${round(height_to_be)} posY: ${round(rover.position.y)} block_xplus: ${round(block_xplus)}`;
-
-    
   }
 }
 
@@ -205,6 +211,9 @@ function keyPressed(){
     jump = true;
     rover.velocity.y = -.5
   }
+  if(keyCode == 17){
+    sprint = true;
+  }
   
 }
 
@@ -213,25 +222,28 @@ function keyReleased(){
   if(keyCode == 32){
     jump = false;
   }
+  if(keyCode == 17){
+    sprint = false;
+  }
 }
 
 function mousePressed(){
   if(mouseButton == RIGHT){
     if(running){
 
-      chunks[chunkx][chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = selected_slot;
-      if(chunks[chunkx][chunkz].generated_blocks.includes(selected_slot) == false && selected_slot != BlockTypes.AIR){
-        chunks[chunkx][chunkz].generated_blocks.push(selected_slot);
+      chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = selected_slot;
+      if(chunks[block_chunkx][block_chunkz].generated_blocks.includes(selected_slot) == false && selected_slot != BlockTypes.AIR){
+        chunks[block_chunkx][block_chunkz].generated_blocks.push(selected_slot);
       }
-      chunks[chunkx][chunkz].cull();
-      chunks[chunkx][chunkz].create_colission_map();
+      chunks[block_chunkx][block_chunkz].cull();
+      chunks[block_chunkx][block_chunkz].create_colission_map();
     }
   }
   else if(mouseButton == LEFT){
     if(running){
-      chunks[chunkx][chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = BlockTypes.AIR;
-      chunks[chunkx][chunkz].cull();
-      chunks[chunkx][chunkz].create_colission_map();
+      chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = BlockTypes.AIR;
+      chunks[block_chunkx][block_chunkz].cull();
+      chunks[block_chunkx][block_chunkz].create_colission_map();
       
     }
   }

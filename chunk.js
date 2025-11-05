@@ -100,7 +100,7 @@ class Chunk{
           if(y > 0){
             if(this.blocks[x-this.position.x][(y-this.position.y)-1][z-this.position.z].type == BlockTypes.AIR &&
               this.blocks[x-this.position.x][y-this.position.y][z-this.position.z].type != BlockTypes.AIR){
-              this.collision_map[x][z] = y;
+              this.collision_map[x-this.position.x][z-this.position.z] = y;
             } 
           } 
         }

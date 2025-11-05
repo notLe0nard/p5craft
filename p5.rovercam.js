@@ -126,8 +126,8 @@ class RoverCam {
     this.fovy += angle;
     this.width = 0; // trigger a perspective call in the draw loop
   }
-  elevate(delta) {
-    this.offset[0] += delta;
+  elevate(deltam) {
+    this.offset[0] += deltam;
   }
 
   // Utility methods
@@ -210,7 +210,12 @@ class RoverCam {
 
 
     
-    this.position.add(this.velocity);
+    //this.position.add(this.velocity);
+
+    this.position.x += this.velocity.x * delta;
+    this.position.y += this.velocity.y * delta;
+    this.position.z += this.velocity.z * delta;
+    
     
   
     
