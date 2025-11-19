@@ -1,23 +1,11 @@
 window.onload = async function() {
 	await sleep(1);
-	document.getElementById("loading_bar").style.width = "10vmin";
+	document.getElementById("loading_bar").style.width = "100vmin";
+	document.querySelector("#singleplayer_menu").style.display = "none";
+	
+	await sleep(10);
 
-	document.getElementById("main_menu").style.opacity = "0";
-	document.getElementById("buttons").style.transform = "scale(10)";
-	document.getElementById("loading_bar").style.width = "30vmin";
-	await sleep(1);
-	document.getElementById("main_menu").style.opacity = "1";
-	document.getElementById("singleplayer_menu").style.display = "none";
-	
-	document.getElementById("loading_bar").style.width = "60vmin";
-	document.getElementById("loading_bar").style.width = "85vmin";
-	await sleep(300);
-	document.getElementById("logo").style.transform = "scale(1)";
-	document.getElementById("buttons").style.transform = "scale(1)";
-	await sleep(300);
 	document.getElementById("loading_screen").style.opacity = 0;
-	
-	await sleep(500);
 	document.getElementById("loading_screen").style.display = "none";
 	
 }

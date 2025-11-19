@@ -17,6 +17,8 @@
     <script src="sketch.js"></script>
     <script src="chunk.js"></script>
     <script src="block_selector.js"></script>
+    <script src="placeblock.js"></script>
+    
     
     
 
@@ -25,28 +27,58 @@
 
     <div id="main_menu">
       <img src="assets/textures/gui/minecraft_title.png" alt="" id="logo">
-      <div id="buttons">
-          <div  class="button" id="singleplayer" onclick="open_singleplayer_menu();">Singleplayer</div>
-          <div  class="button" id="multiplayer" >Multiplayer</div>
-          <div  class="button" id="options"     >Options</div>
-      </div>         <!-- main_version.day.month.year -->
+
+      <div class="mc-menu">
+        <div class="mc-button full" onclick="open_singleplayer_menu();">
+          <div class="title">Singleplayer</div>
+        </div>
+        <div class="mc-button full">
+          <div class="title">Multiplayer</div>
+        </div>
+        <div class="mc-button full">
+          <div class="title">Minecraft Realms</div>
+        </div>
+        <div class="double">
+          <div class="mc-button full">
+            <div class="title">Options</div>
+          </div>
+          <div class="mc-button full">
+            <div class="title">Quit Game</div>
+          </div>
+        </div>
+        <div class="mc-button full lang">
+          <div class="title"><img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/></div>
+        </div>
+      </div>
+      
+      <!-- main_version.day.month.year -->
       <p id="bottom_left_text">P5Craft 0.20.12.24</p>
     </div>
+
     <div id="singleplayer_menu">
-          <div id="buttons_singleplayer">
-      <input type="text" placeholder="chunk size" name="chunk_size" id="chunk_size">
-      <input type="text" placeholder="world size" name="world_size" id="world_size">
-      
-              <div  class="button" id="generate" onclick="generate_world();">Generate</div>
-              <div  class="button" id="back" onclick="open_main_menu();">Back</div>
-          </div>
+      <div id="buttons_singleplayer">
+        <input type="text" placeholder="chunk size" name="chunk_size" id="chunk_size">
+        <input type="text" placeholder="world size" name="world_size" id="world_size">
+
+
+
+        <div class="mc-button full" onclick="generate_world();">
+          <div class="title">Generate</div>
+        </div>
+
+        <div class="mc-button full" onclick="open_main_menu();">
+          <div class="title">Back</div>
+        </div>
+
+
+      </div>
     </div>
     <div id="hud">
       <div class="centerer">
         <img src="assets/textures/gui/hud/crosshair.png" alt="+" id="crosshair">
       </div>
       <p id="topleft_info">60 FPS</p>
-
+      <p id="chat"></p>
       
       <div id="hotbar">
         <img src="assets/textures/gui/hud/hotbar.png" alt="" id="hotbar_img">
@@ -62,6 +94,8 @@
       
     </div>
     <script src="hotbar.js"></script>
+    <script src="chat.js"></script>
+    
     
   </body>
 </html>
