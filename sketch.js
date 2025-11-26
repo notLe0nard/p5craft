@@ -59,6 +59,8 @@ var rover;
 
 
 let height_to_be;
+let chat_open = false;
+
 
 
 
@@ -69,6 +71,7 @@ let jump = false;
 
 async function setup_() {
   const startTime = performance.now();
+  document.querySelector("#hud").style.display = "flex"
   noiseSeed(1);
   let canvas = createCanvas(windowWidth, windowHeight, WEBGL); 
   loadBlockTextures(canvas);
@@ -211,20 +214,21 @@ function draw() {
       cubeX_relative = cubeX-block_chunkx*chunk_size;
       cubeZ_relative = cubeZ-block_chunkz*chunk_size;
 
-
-
-
-      //if it cant find a block after distance five there will be none 
-      if(i == 5 && chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type == BlockTypes.AIR){
-        block_selected = false;
-      }
-
-      //check if block is not air and if it is not air it will be the selected block
-      if(chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type != BlockTypes.AIR){
-        block_selected = true;
-        break;
+      if (block_chunkx > world_size || block_chunkz > world_size || block_chunkx < 0 || block_chunkz < 0 || cubeY > chunk_size || cubeY < 0){
+        return
       }else{
-        block_selected = false;
+        //if it cant find a block after distance five there will be none 
+        if(i == 5 && chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type == BlockTypes.AIR){
+          block_selected = false;
+        }
+
+        //check if block is not air and if it is not air it will be the selected block
+        if(chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type != BlockTypes.AIR){
+          block_selected = true;
+          break;
+        }else{
+          block_selected = false;
+        }
       }
     }
 
@@ -265,7 +269,6 @@ function keyPressed(){
   if(keyCode == 17){
     sprint = true;
   }
-  
 }
 
 function keyReleased(){
