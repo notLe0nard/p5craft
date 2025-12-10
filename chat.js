@@ -1,7 +1,7 @@
 chat = document.querySelector("#chat")
 chatinput = document.querySelector("#chatinput")
 
-document.addEventListener("keydown", keyPressed2);
+document.addEventListener("keyup", keyPressed2);
 function keyPressed2(e) {
   print(e.keyCode);
   if(e.keyCode == 84 && chat_open == false){
@@ -9,6 +9,8 @@ function keyPressed2(e) {
     chatinput.style.height="50px"
     chatinput.style.opacity="1"
     chatinput.focus();
+    chatinput.value = "";
+    document.exitPointerLock();
   }
   if(e.keyCode == 13 && chat_open){
     sendChat(chatinput.value)

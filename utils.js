@@ -1,16 +1,17 @@
-function worldCordsToLocalCords(location){
-    chunkx = Math.floor((round(location.x))/chunk_size);    
-    chunkz = Math.floor((round(location.z))/chunk_size);
+function toChunkCords(x,z){
+    chunkx = Math.floor((round(x))/chunk_size);    
+    chunkz = Math.floor((round(y))/chunk_size);
+    return{
+        x: chunkx,
+        z: chunkz,
+    }
+}
 
-    //relative to chunk
-    localx = location.x-chunkx*chunk_size;
-    localz = location.z-chunkz*chunk_size;
-
-
-    return {
-        localx: localx,
-        localz: localz,
-        chunkx: chunkx,
-        chunkz: chunkz
-    };
+function toLocalCords(x,z){
+    localx = x-chunkx*chunk_size;
+    localz = z-chunkz*chunk_size;
+    return{
+        x: localx,
+        z: localz,
+    }
 }

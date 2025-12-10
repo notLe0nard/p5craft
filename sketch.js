@@ -7,57 +7,39 @@ let world_size;
 let walking_speed = .05;
 let sprinting_speed = .07;
 
-
-
-
-
-
 //no changing
 let running = false;
 let delta = 0.0;
 let sprint = false;
-
 let textures = [];
 let mouse_captured = false;
-
-
 let block_selected = false;
 
+
 //chunk cordinates the player is in
-let chunkx = 0;
-let chunkz = 0;
+let chunkCords = cvec(0,0);
 
 //cordinates of the block the player is facing
-let cubeX = 0;
-let cubeY = 0;
-let cubeZ = 0;
+let blockCords = cvec(0,0,0);
 
+//cordinates of the block the player is facing, relative to the current chunk
+let relativeBlockCords = cvec(0,0,0);
+
+//chunk cordinates of the block the player is facing
+let chunkBlockCords = cvec(0,0,0);
 
 //cords of where the raycast intercepts the selected block
-let cubeX_intercept = 0;
-let cubeY_intercept = 0;
-let cubeZ_intercept = 0;
+let blockCordsIntercept = cvec(0,0,0);
 
 
 
 
-let cubeX_relative = 0; 
-//y is the same
-let cubeZ_relative = 0;
-
-let block_chunkx = 0;
-let block_chunkz = 0;
 
 
 
 let fps = 0;
-
 p5.disableFriendlyErrors = true; //performance
-
-
 var rover;
-
-
 let height_to_be;
 let chat_open = false;
 
@@ -66,8 +48,6 @@ let chat_open = false;
 
 //movement
 let jump = false;
-
-
 
 async function setup_() {
   const startTime = performance.now();
@@ -111,8 +91,8 @@ async function setup_() {
   let generated_chunks = 0;
   let chunks_to_generate = world_size * world_size;
   for (let x = 0; x < world_size; x++) {
-  for (let z = 0; z < world_size; z++) {
-    chunks[x][z] = new Chunk(x*chunk_size, 0, z*chunk_size, generated_chunks);
+  for (let y = 0; y < world_size; y++) {
+    chunks[x][y] = new Chunk(x*chunk_size, 0, y*chunk_size, generated_chunks);
     generated_chunks++;
     document.getElementById("loading_bar").style.width = generated_chunks / chunks_to_generate * 85 + "vmin";
     document.getElementById("loading_info").innerHTML = "generating chunk:" + generated_chunks + "/" + chunks_to_generate + "<br>";
@@ -130,6 +110,19 @@ async function setup_() {
 
 function draw() {
   if(running){
+    //calculate all cordinates
+      
+    chunkCords.x = Math.floor((round(rover.position.x))/chunk_size);    
+    chunkCords.y = Math.floor((round(rover.position.y))/chunk_size);
+    if(chunkCords.x > world_size || chunkCords.x < 0){chunkCords.x=0;}
+    if(chunkCords.y > world_size || chunkCords.y < 0){chunkCords.y=0;}
+
+
+
+
+
+
+
     delta = deltaTime/(1000/20);
     if (sprint){
       rover.speed = sprinting_speed;
@@ -148,82 +141,81 @@ function draw() {
 
     //render chunks
     for (let x = 0; x < world_size; x++) {
-    for (let z = 0; z < world_size; z++) {
-      chunks[x][z].render();
-      chunks[x][z].renderChunkBorders();
+    for (let y = 0; y < world_size; y++) {
+      chunks[x][y].render();
+      chunks[x][y].renderChunkBorders();
       
     }}
 
 
-  
-    chunkx = Math.floor((round(rover.position.x))/chunk_size);    
-    chunkz = Math.floor((round(rover.position.z))/chunk_size);
-    
 
     
 
 
-    //height_to_be = chunks[chunkx][chunkz].collision_map[round(rover.position.x)-chunkx*chunk_size][round(rover.position.z)-chunkz*chunk_size] -2;
+    //height_to_be = chunks[chunkCords.x][chunkCords.z].collision_map[round(rover.position.x)-chunkCords.x*chunk_size][round(rover.position.z)-chunkCords.z*chunk_size] -2;
 
-
-    for (let i = round(rover.position.y); i < chunk_size; i++) {
-      let blocktype = chunks[chunkx][chunkz].blocks[round(rover.position.x)-chunkx*chunk_size][i][round(rover.position.z)-chunkz*chunk_size].type
+    for (let i = round(rover.position.z); i < chunk_size; i++) {//height to be
+      let blocktype = chunks[chunkCords.x][chunkCords.y].blocks[round(relativeBlockCords.x)][i][round(relativeBlockCords.y)].type
       if(blocktype != BlockTypes.AIR){
         height_to_be = i - 2;
         break;
-      }//absolute cinema
+      }
     }
+
+    //gravity
+    if(rover.position.z < height_to_be + 0.001 && rover.position.z > height_to_be - 0.001){
+      rover.position.z = height_to_be;
+    }
+    else{
+      if(rover.position.z < height_to_be){
+        rover.velocity.z += gravity * delta;
+      }else{
+        rover.velocity.z = 0;
+      }
+      if(rover.position.z > height_to_be){
+        rover.position.z = height_to_be;
+      }
+    }
+
+
   
     
 
 
     
-    //gravity
-    if(rover.position.y < height_to_be + 0.001 && rover.position.y > height_to_be - 0.001){
-      rover.position.y = height_to_be;
-    }
-    else{
-      if(rover.position.y < height_to_be){
-        rover.velocity.y += gravity * delta;
-      }else{
-        rover.velocity.y = 0;
-      }
-      if(rover.position.y > height_to_be){
-        rover.position.y = height_to_be;
-      }
-      
-    }
 
 
     for (let i = 0.0; i < 5; i+=0.001) { //find the selected block
       let distance = i; // Distance from the camera
-      cubeX_intercept = rover.position.x + cos(rover.pan) * cos(rover.tilt) * distance;
-      cubeY_intercept = rover.position.y + sin(rover.tilt) * distance;
-      cubeZ_intercept = rover.position.z + sin(rover.pan) * cos(rover.tilt) * distance;
+      blockCordsIntercept.x = rover.position.x + cos(rover.pan) * cos(rover.tilt) * distance;
+      blockCordsIntercept.y = rover.position.y + sin(rover.pan) * cos(rover.tilt) * distance;
+      blockCordsIntercept.z = rover.position.z + sin(rover.tilt) * distance;
 
       //snap to blocks
-      cubeX = round(cubeX_intercept);
-      cubeY = round(cubeY_intercept);
-      cubeZ = round(cubeZ_intercept);
+      blockCords.x = round(blockCordsIntercept.x);
+      blockCords.y = round(blockCordsIntercept.y);
+      blockCords.z = round(blockCordsIntercept.z);
 
 
-      block_chunkx = Math.floor((round(cubeX))/chunk_size);    
-      block_chunkz = Math.floor((round(cubeZ))/chunk_size);
+      chunkBlockCords.x = Math.floor((round(blockCords.x))/chunk_size);    
+      chunkBlockCords.y = Math.floor((round(blockCords.y))/chunk_size);
 
       //relative to chunk
-      cubeX_relative = cubeX-block_chunkx*chunk_size;
-      cubeZ_relative = cubeZ-block_chunkz*chunk_size;
+      relativeBlockCords.x = blockCords.x-chunkBlockCords.x*chunk_size;
+      relativeBlockCords.y = blockCords.y-chunkBlockCords.y*chunk_size;
 
-      if (block_chunkx > world_size || block_chunkz > world_size || block_chunkx < 0 || block_chunkz < 0 || cubeY > chunk_size || cubeY < 0){
+
+
+      if (chunkBlockCords.x > world_size || chunkBlockCords.y > world_size || chunkBlockCords.x < 0 || chunkBlockCords.y < 0 || blockCords.z > chunk_size || blockCords.y < 0){
         return
       }else{
         //if it cant find a block after distance five there will be none 
-        if(i == 5 && chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type == BlockTypes.AIR){
+        if(i == 5 && chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z_relative].type == BlockTypes.AIR){
           block_selected = false;
         }
 
         //check if block is not air and if it is not air it will be the selected block
-        if(chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type != BlockTypes.AIR){
+        if(chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z_relative].type != BlockTypes.AIR){
           block_selected = true;
           break;
         }else{
@@ -233,7 +225,7 @@ function draw() {
     }
 
     if(block_selected){
-      draw_block_selector(cubeX,cubeY,cubeZ,color(0,0,0,0),color(0,0,0,255),0.01);
+      draw_block_selector(blockCords.x,blockCords.y,blockCords.z,color(0,0,0,0),color(0,0,0,255),0.01);
     }
 
 
@@ -244,9 +236,9 @@ function draw() {
     ${Math.round(fps)} FPS Frametime: ${deltaTime}<br>
     delta: ${delta}<br>
     X: ${round(rover.position.x)} Y: ${round(rover.position.y)} Z: ${round(rover.position.z)}<br>
-    Chunk X: ${chunkx} Z: ${chunkz}<br>    
+    Chunk X: ${chunkCords.x} Y: ${chunkCords.y}<br>    
     Vel X: ${round(rover.velocity.x)} Y: ${round(rover.velocity.y)} Z: ${round(rover.velocity.z)}<br>
-    Block: X:${cubeX} Y:${cubeY} Z:${cubeZ}<br>
+    Block: X:${blockCords.x} Y:${blockCords.y} Z:${blockCords.z}<br>
     heightTB: ${round(height_to_be)} posY: ${round(rover.position.y)} block_xplus: ${round(block_xplus)}`;
   }
 }
@@ -264,7 +256,7 @@ function keyPressed(){
   print(keyCode);
   if(keyCode == 32){
     jump = true;
-    rover.velocity.y = -.5
+    rover.velocity.z = -.5
   }
   if(keyCode == 17){
     sprint = true;
@@ -284,45 +276,45 @@ function keyReleased(){
 function mousePressed(){
   if(mouseButton == RIGHT){
     if(running){
-      let blockPlaceLocation = createVector(0,0,0);
+      let blockPlaceLocation = cvec(0,0,0);
       let distance_temp = 10.0;
       let side_temp = "idk"
 
-      if(createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX+1,cubeY,cubeZ)) < distance_temp){
-        distance_temp = createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX+1,cubeY,cubeZ));
+      if(cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x+1,blockCords.y,blockCords.z)) < distance_temp){
+        distance_temp = cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x+1,blockCords.y,blockCords.z));
         side_temp = "x+1"
-        blockPlaceLocation = createVector(cubeX+1,cubeY,cubeZ);// copy to everyone
+        blockPlaceLocation = cvec(blockCords.x+1,blockCords.y,blockCords.z);// copy to everyone
       }
       
-      if(createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX-1,cubeY,cubeZ)) < distance_temp){
-        distance_temp = createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX-1,cubeY,cubeZ));
+      if(cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x-1,blockCords.y,blockCords.z)) < distance_temp){
+        distance_temp = cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x-1,blockCords.y,blockCords.z));
         side_temp = "x-1"
-        blockPlaceLocation = createVector(cubeX-1,cubeY,cubeZ);
+        blockPlaceLocation = cvec(blockCords.x-1,blockCords.y,blockCords.z);
       }
       
-      if(createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY+1,cubeZ)) < distance_temp){
-        distance_temp = createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY+1,cubeZ));
+      if(cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y+1,blockCords.z)) < distance_temp){
+        distance_temp = cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y+1,blockCords.z));
         side_temp = "y+1"
-        blockPlaceLocation = createVector(cubeX,cubeY+1,cubeZ);
+        blockPlaceLocation = cvec(blockCords.x,blockCords.y+1,blockCords.z);
       }
       
-      if(createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY-1,cubeZ)) < distance_temp){
-        distance_temp = createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY-1,cubeZ));
+      if(cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y-1,blockCords.z)) < distance_temp){
+        distance_temp = cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y-1,blockCords.z));
         side_temp = "y-1"
-        blockPlaceLocation = createVector(cubeX,cubeY-1,cubeZ);
+        blockPlaceLocation = cvec(blockCords.x,blockCords.y-1,blockCords.z);
       }
       
-      if(createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY,cubeZ+1)) < distance_temp){
-        distance_temp = createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY,cubeZ+1));
+      if(cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y,blockCords.z+1)) < distance_temp){
+        distance_temp = cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y,blockCords.z+1));
         side_temp = "z+1"
-        blockPlaceLocation = createVector(cubeX,cubeY,cubeZ+1);
+        blockPlaceLocation = cvec(blockCords.x,blockCords.y,blockCords.z+1);
       }
 
       
-      if(createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY,cubeZ-1)) < distance_temp){
-        distance_temp = createVector(cubeX_intercept,cubeY_intercept,cubeZ_intercept).dist(createVector(cubeX,cubeY,cubeZ-1));
+      if(cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y,blockCords.z-1)) < distance_temp){
+        distance_temp = cvec(blockCordsIntercept.x,blockCordsIntercept.y,blockCordsIntercept.z).dist(cvec(blockCords.x,blockCords.y,blockCords.z-1));
         side_temp = "z-1"
-        blockPlaceLocation = createVector(cubeX,cubeY,cubeZ-1);
+        blockPlaceLocation = cvec(blockCords.x,blockCords.y,blockCords.z-1);
       }
       setBlock(blockPlaceLocation, selected_slot);
       
@@ -334,9 +326,9 @@ function mousePressed(){
   }
   else if(mouseButton == LEFT){
     if(running){
-      chunks[block_chunkx][block_chunkz].blocks[cubeX_relative][cubeY][cubeZ_relative].type = BlockTypes.AIR;
-      chunks[block_chunkx][block_chunkz].cull();
-      chunks[block_chunkx][block_chunkz].create_colission_map();
+      chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z_relative].type = BlockTypes.AIR;
+      chunks[chunkBlockCords.x][chunkBlockCords.y].cull();
+      chunks[chunkBlockCords.x][chunkBlockCords.y].create_colission_map();
       
     }
   }
