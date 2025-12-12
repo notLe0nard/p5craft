@@ -155,7 +155,7 @@ function draw() {
     //height_to_be = chunks[chunkCords.x][chunkCords.z].collision_map[round(rover.position.x)-chunkCords.x*chunk_size][round(rover.position.z)-chunkCords.z*chunk_size] -2;
 
     for (let i = round(rover.position.z); i < chunk_size; i++) {//height to be
-      let blocktype = chunks[chunkCords.x][chunkCords.y].blocks[round(relativeBlockCords.x)][i][round(relativeBlockCords.y)].type
+      let blocktype = chunks[chunkCords.x][chunkCords.y].blocks[round(rover.position.x)][round(rover.position.y)][i].type
       if(blocktype != BlockTypes.AIR){
         height_to_be = i - 2;
         break;
@@ -196,26 +196,23 @@ function draw() {
       blockCords.y = round(blockCordsIntercept.y);
       blockCords.z = round(blockCordsIntercept.z);
 
-
-      chunkBlockCords.x = Math.floor((round(blockCords.x))/chunk_size);    
-      chunkBlockCords.y = Math.floor((round(blockCords.y))/chunk_size);
+      //chunk cords
+      chunkBlockCords = toChunkCords(blockCords);
 
       //relative to chunk
-      relativeBlockCords.x = blockCords.x-chunkBlockCords.x*chunk_size;
-      relativeBlockCords.y = blockCords.y-chunkBlockCords.y*chunk_size;
+      relativeBlockCords = toLocalCords(blockCords);
 
 
-
-      if (chunkBlockCords.x > world_size || chunkBlockCords.y > world_size || chunkBlockCords.x < 0 || chunkBlockCords.y < 0 || blockCords.z > chunk_size || blockCords.y < 0){
+      if (chunkBlockCords.x > world_size || chunkBlockCords.y > world_size || chunkBlockCords.x < 0 || chunkBlockCords.y < 0 || blockCords.z > chunk_size || blockCords.y < 0 || blockCords.z < 0){
         return
       }else{
         //if it cant find a block after distance five there will be none 
-        if(i == 5 && chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z_relative].type == BlockTypes.AIR){
+        if(i == 5 && chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z].type == BlockTypes.AIR){
           block_selected = false;
         }
 
         //check if block is not air and if it is not air it will be the selected block
-        if(chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z_relative].type != BlockTypes.AIR){
+        if(chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][relativeBlockCords.y][blockCords.z].type != BlockTypes.AIR){
           block_selected = true;
           break;
         }else{
@@ -326,10 +323,9 @@ function mousePressed(){
   }
   else if(mouseButton == LEFT){
     if(running){
-      chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z_relative].type = BlockTypes.AIR;
+      chunks[chunkBlockCords.x][chunkBlockCords.y].blocks[relativeBlockCords.x][blockCords.y][blockCords.z].type = BlockTypes.AIR;
       chunks[chunkBlockCords.x][chunkBlockCords.y].cull();
-      chunks[chunkBlockCords.x][chunkBlockCords.y].create_colission_map();
-      
+
     }
   }
 }

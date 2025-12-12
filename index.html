@@ -1,30 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="p5.js"></script>
-    <script src="p5.rovercam.js"></script>
-    <script src="p5.sound.min.js"></script>
+    <script src="lib/p5.js"></script>
+    <script src="lib/p5.rovercam.js"></script>
+    <script src="lib/p5.sound.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="minecraftui.css">
-    
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="assets/textures/etc/minecraft_title.ico">
     <title>P5Craft</title>
-    
   </head>
   <body>
-    <script src="vector.js"></script>
-    
-    <script src="utils.js"></script>
-
-    <script src="block.js"></script>
-    <script src="sketch.js"></script>
-    <script src="chunk.js"></script>
-    <script src="block_selector.js"></script>
-    <script src="placeblock.js"></script>
-    
-    
-    
     <div id="main_menu">
       <img src="assets/textures/gui/minecraft_title.png" alt="" id="logo">
       <div class="mc-menu">
@@ -52,24 +38,18 @@
       <!-- main_version.day.month.year -->
       <p id="bottom_left_text">P5Craft 0.20.12.24</p>
     </div>
-
     <div id="singleplayer_menu">
       <div id="buttons_singleplayer">
         <input type="text" placeholder="chunk size" name="chunk_size" id="chunk_size" class="minecraft_input">
         <input type="text" placeholder="world size" name="world_size" id="world_size" class="minecraft_input">
-
-
-
         <div class="mc-button full" onclick="generate_world();">
           <div class="title">Generate</div>
         </div>
-
         <div class="mc-button full" onclick="open_main_menu();">
           <div class="title">Back</div>
         </div>
       </div>
     </div>
-    
     <div id="hud">
       <div class="centerer">
         <img src="assets/textures/gui/hud/crosshair.png" alt="+" id="crosshair">
@@ -84,18 +64,22 @@
         <img src="assets/textures/gui/hud/hotbar_selection.png" alt="" id="hotbar_selector">
       </div>
     </div>
-    <script src="ui.js"></script>
-
     <div id="loading_screen">
       <p id="mojang_logo">gnajom</p>
       <div id="loading_bar_border"><div id="loading_bar"></div></div>
       <p id="loading_info"></p>
-      
     </div>
-    <script src="hotbar.js"></script>
-    <script src="chat.js"></script>
-    <script src="command.js"></script>
-    
-    
   </body>
 </html>
+
+<script src="include/ui.js"></script>
+<script src="include/vector.js"></script>
+<script src="include/utils.js"></script>
+<script src="include/block.js"></script>
+<script src="include/chunk.js"></script>
+<script src="include/block_selector.js"></script>
+<script src="include/placeblock.js"></script>
+<script src="include/hotbar.js"></script>
+<script src="include/chat.js"></script>
+<script src="include/command.js"></script>
+<script src="sketch.js"></script>
